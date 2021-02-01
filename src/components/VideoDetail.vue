@@ -1,22 +1,16 @@
 <template>
   <div class="embed-container" :class="{ hide: video == null }">
     <iframe
-      :src="
-        'https://www.youtube.com/embed/' +
-          (video !== null ? video.id.videoId : null) +
-          '?rel=0'
-      "
+      v-if="video"
+      :src="videoUrl"
       frameborder="0"
       allowfullscreen
     ></iframe>
   </div>
   <div>
-    <h2 class="title" v-html="video !== null ? video.snippet.title : null"></h2>
+    <h2 class="title" v-if="video" v-html="video.snippet.title"></h2>
     <p class="date">{{ videoDate }}</p>
-    <p
-      class="description"
-      v-html="video !== null ? video.snippet.description : null"
-    ></p>
+    <p class="description" v-if="video" v-html="video.snippet.description"></p>
   </div>
 </template>
 
@@ -25,6 +19,12 @@ export default {
   name: 'VideoDetail',
   props: {
     video: Object
+  },
+  computed: {
+    videoUrl() {
+      const { videoId } = this.video.id;
+      return 'https://www.youtube.com/embed/' + videoId + '?rel=0';
+    }
   },
   data() {
     return {
